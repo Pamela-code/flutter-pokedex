@@ -1,18 +1,18 @@
-import 'package:dio/dio.dart';
+import 'package:pokedex/core/constants.dart';
+import 'package:pokedex/core/network/http_client.dart';
 import 'package:pokedex/modules/home/model/poke_list_item_model.dart';
 import 'package:pokedex/modules/home/repository/poke_list_repository.dart';
-import 'package:pokedex/core/constants.dart';
 
 class PokeListRepositoryImpl implements IPokeListRepository {
-  final Dio dio;
+  final IHttpClient client;
   final int pageSize = 20;
 
-  PokeListRepositoryImpl({Dio? dio}) : dio = dio ?? Dio();
+  PokeListRepositoryImpl(this.client);
 
   @override
   Future<List<PokeListItemModel>> fetchPokeList({int offset = 0, int limit = 20}) async {
     try {
-      final response = await dio.get('$baseUrl?limit=$pageSize&offset=$offset');
+      final response = await client.get('$baseUrl?limit=$pageSize&offset=$offset');
 
       if (response.statusCode == 200) {
         List results = response.data['results'];

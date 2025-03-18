@@ -1,16 +1,16 @@
-import 'package:dio/dio.dart';
+import 'package:pokedex/core/network/http_client.dart';
 import 'package:pokedex/modules/poke_details/model/pokemon_model.dart';
 import 'package:pokedex/modules/poke_details/repository/pokemon_details_repository.dart';
 
 class PokemonDetailsRepositoryImpl implements IPokemonDetailsRepository {
-  final Dio dio;
+  final IHttpClient client;
 
-  PokemonDetailsRepositoryImpl({Dio? dio}) : dio = dio ?? Dio();
+  PokemonDetailsRepositoryImpl(this.client);
 
   @override
   Future<PokemonModel> fetchPokemon(String url) async {
     try {
-      final response = await dio.get(url);
+      final response = await client.get(url);
 
       if (response.statusCode == 200) {
         return PokemonModel.fromJson(response.data);
