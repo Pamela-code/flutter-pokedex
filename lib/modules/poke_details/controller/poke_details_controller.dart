@@ -7,13 +7,25 @@ class PokeDetailsController extends ValueNotifier<PokemonModel?> {
 
   final IPokemonDetailsRepository repository;
   bool isLoading = false;
+  String? errorMessage;
 
   Future<void> fetchPokemon(String url) async {
     isLoading = true;
+    errorMessage = null;
     notifyListeners();
 
-    final pokemon = await repository.fetchPokemon(url);
-    value = pokemon;
+    final result = await repository.fetchPokemon(url);
+
+    result.fold(
+      (failure) {
+        errorMessage = failure.userMessage;
+        value = null;
+      },
+      (pokemon) {
+        value = pokemon;
+      },
+    );
+
     isLoading = false;
     notifyListeners();
   }

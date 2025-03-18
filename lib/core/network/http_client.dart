@@ -1,3 +1,6 @@
+import 'package:dartz/dartz.dart';
+import 'package:pokedex/core/failure.dart';
+
 abstract class IHttpClient {
-  Future<dynamic> get(String url);
+  Future<Either<ClientFailure, dynamic>> get(String url);
 }

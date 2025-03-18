@@ -44,6 +44,10 @@ class _PokeListViewState extends State<PokeListView> {
             return Center(child: CircularProgressIndicator());
           }
 
+          if (controller.errorMessage != null) {
+            Center(child: Text(controller.errorMessage!));
+          }
+
           return ListView.builder(
             controller: scrollController,
             itemCount: pokemons.length + 1,

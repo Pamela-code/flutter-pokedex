@@ -1,3 +1,5 @@
+import 'package:dartz/dartz.dart';
+import 'package:pokedex/core/failure.dart';
 import 'package:pokedex/core/network/http_client.dart';
 import 'package:pokedex/modules/poke_details/model/pokemon_model.dart';
 import 'package:pokedex/modules/poke_details/repository/pokemon_details_repository.dart';
@@ -8,17 +10,19 @@ class PokemonDetailsRepositoryImpl implements IPokemonDetailsRepository {
   PokemonDetailsRepositoryImpl(this.client);
 
   @override
-  Future<PokemonModel> fetchPokemon(String url) async {
+  Future<Either<BaseFailure, PokemonModel>> fetchPokemon(String url) async {
     try {
-      final response = await client.get(url);
+      final result = await client.get(url);
 
-      if (response.statusCode == 200) {
-        return PokemonModel.fromJson(response.data);
-      } else {
-        throw Exception('Erro ao buscar Pokémon');
-      }
+      return result.fold((failure) => Left(failure), (response) {
+        if (response.statusCode == 200) {
+          return Right(PokemonModel.fromJson(response.data));
+        } else {
+          return Left(FetchPokemonFailure(debugMessage: 'Unexpected status code: ${response.statusCode}'));
+        }
+      });
     } catch (e) {
-      throw Exception('Erro ao buscar Pokémon: $e');
+      return Left(FetchPokemonFailure(debugMessage: e.toString()));
     }
   }
 }

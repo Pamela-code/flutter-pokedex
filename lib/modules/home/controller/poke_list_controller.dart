@@ -9,16 +9,27 @@ class PokeListController extends ValueNotifier<List<PokeListItemModel>> {
   bool isLoading = false;
   int offset = 0;
   final int limit = 20;
+  String? errorMessage;
 
   Future<void> fetchPokemons() async {
     if (isLoading) return;
 
     isLoading = true;
+    errorMessage = null;
     notifyListeners();
 
-    final newPokemons = await repository.fetchPokeList(offset: offset, limit: limit);
-    value = [...value, ...newPokemons];
-    offset += limit;
+    final result = await repository.fetchPokeList(offset: offset, limit: limit);
+
+    result.fold(
+      (failure) {
+        errorMessage = failure.userMessage;
+      },
+      (newPokemons) {
+        value = [...value, ...newPokemons];
+        offset += limit;
+      },
+    );
+
     isLoading = false;
     notifyListeners();
   }

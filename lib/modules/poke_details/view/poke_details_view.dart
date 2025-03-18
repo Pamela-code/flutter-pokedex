@@ -28,44 +28,46 @@ class _PokeDetailsViewState extends State<PokeDetailsView> {
       body: ValueListenableBuilder(
         valueListenable: controller,
         builder: (context, pokemon, child) {
-          if (controller.isLoading) {
+          if (controller.isLoading && pokemon == null) {
             return Center(child: CircularProgressIndicator());
           }
-          if (pokemon == null) {
-            return Center(child: Text('Erro ao carregar informações'));
+          if (controller.errorMessage != null && pokemon == null) {
+            return Center(child: Text(controller.errorMessage!));
           }
-          return Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // Imagem com cache
-                CachedNetworkImage(
-                  imageUrl: pokemon.imageUrl,
-                  placeholder: (context, url) => const CircularProgressIndicator(),
-                  errorWidget: (context, url, error) => const Icon(Icons.error),
-                  width: 200,
-                  height: 200,
-                  fit: BoxFit.contain,
-                ),
-                const SizedBox(height: 16),
+          if (pokemon != null) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CachedNetworkImage(
+                    imageUrl: pokemon.imageUrl,
+                    placeholder: (context, url) => const CircularProgressIndicator(),
+                    errorWidget: (context, url, error) => const Icon(Icons.error),
+                    width: 200,
+                    height: 200,
+                    fit: BoxFit.contain,
+                  ),
+                  const SizedBox(height: 16),
 
-                Text(pokemon.name.toUpperCase(), style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-                const SizedBox(height: 8),
+                  Text(pokemon.name.toUpperCase(), style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 8),
 
-                Wrap(
-                  spacing: 8,
-                  children:
-                      pokemon.types.map((type) {
-                        return Chip(label: Text(type));
-                      }).toList(),
-                ),
-                const SizedBox(height: 16),
+                  Wrap(
+                    spacing: 8,
+                    children:
+                        pokemon.types.map((type) {
+                          return Chip(label: Text(type));
+                        }).toList(),
+                  ),
+                  const SizedBox(height: 16),
 
-                Text("Altura: ${pokemon.height} cm", style: const TextStyle(fontSize: 16)),
-                Text("Peso: ${pokemon.weight} kg", style: const TextStyle(fontSize: 16)),
-              ],
-            ),
-          );
+                  Text("Altura: ${pokemon.height} cm", style: const TextStyle(fontSize: 16)),
+                  Text("Peso: ${pokemon.weight} kg", style: const TextStyle(fontSize: 16)),
+                ],
+              ),
+            );
+          }
+          return SizedBox();
         },
       ),
     );
