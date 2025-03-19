@@ -14,6 +14,11 @@ class PokeListItemModel extends Equatable {
     return PokeListItemModel(name: name ?? this.name, url: url ?? this.url);
   }
 
+  String get capitalizedName {
+    if (name.isEmpty) return name;
+    return name[0].toUpperCase() + name.substring(1);
+  }
+
   @override
   List<Object?> get props => [name, url];
 }

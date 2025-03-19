@@ -9,7 +9,7 @@ class App extends StatelessWidget {
     return MaterialApp.router(
       title: 'Pokedex',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple)),
+      theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.red)),
       routerConfig: appRouter,
     );
   }
