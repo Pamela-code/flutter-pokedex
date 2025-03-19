@@ -15,6 +15,22 @@ class PokeDetailsView extends StatefulWidget {
 
 class _PokeDetailsViewState extends State<PokeDetailsView> {
   final controller = locator<PokeDetailsController>();
+
+  Color? typeColor(List<String> types) {
+    switch (types[0]) {
+      case "bug":
+        return Colors.yellow;
+      case "fire":
+        return Colors.red;
+      case "water":
+        return Colors.blue;
+      case "flying":
+        return Colors.lightBlue;
+      default:
+        return Colors.white;
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -35,35 +51,38 @@ class _PokeDetailsViewState extends State<PokeDetailsView> {
             return Center(child: Text(controller.errorMessage!));
           }
           if (pokemon != null) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CachedNetworkImage(
-                    imageUrl: pokemon.imageUrl,
-                    placeholder: (context, url) => const CircularProgressIndicator(),
-                    errorWidget: (context, url, error) => const Icon(Icons.error),
-                    width: 200,
-                    height: 200,
-                    fit: BoxFit.contain,
-                  ),
-                  const SizedBox(height: 16),
+            return Container(
+              color: typeColor(pokemon.types),
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CachedNetworkImage(
+                      imageUrl: pokemon.imageUrl,
+                      placeholder: (context, url) => const CircularProgressIndicator(),
+                      errorWidget: (context, url, error) => const Icon(Icons.error),
+                      width: 200,
+                      height: 200,
+                      fit: BoxFit.contain,
+                    ),
+                    const SizedBox(height: 16),
 
-                  Text(pokemon.name.toUpperCase(), style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-                  const SizedBox(height: 8),
+                    Text(pokemon.name.toUpperCase(), style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                    const SizedBox(height: 8),
 
-                  Wrap(
-                    spacing: 8,
-                    children:
-                        pokemon.types.map((type) {
-                          return Chip(label: Text(type));
-                        }).toList(),
-                  ),
-                  const SizedBox(height: 16),
+                    Wrap(
+                      spacing: 8,
+                      children:
+                          pokemon.types.map((type) {
+                            return Chip(label: Text(type));
+                          }).toList(),
+                    ),
+                    const SizedBox(height: 16),
 
-                  Text("Altura: ${pokemon.height} cm", style: const TextStyle(fontSize: 16)),
-                  Text("Peso: ${pokemon.weight} kg", style: const TextStyle(fontSize: 16)),
-                ],
+                    Text("Altura: ${pokemon.height} cm", style: const TextStyle(fontSize: 16)),
+                    Text("Peso: ${pokemon.weight} kg", style: const TextStyle(fontSize: 16)),
+                  ],
+                ),
               ),
             );
           }
