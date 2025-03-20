@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pokedex/app/app_locator.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:pokedex/modules/poke_details/model/pokemon_type_enum.dart';
 
 import '../controller/poke_details_controller.dart';
 
@@ -16,16 +17,36 @@ class PokeDetailsView extends StatefulWidget {
 class _PokeDetailsViewState extends State<PokeDetailsView> {
   final controller = locator<PokeDetailsController>();
 
-  Color? typeColor(List<String> types) {
+  Color? typeColor(List<PokemonType> types) {
     switch (types[0]) {
-      case "bug":
+      case PokemonType.bug:
         return Colors.yellow;
-      case "fire":
+      case PokemonType.fire:
         return Colors.red;
-      case "water":
+      case PokemonType.water:
         return Colors.blue;
-      case "flying":
+      case PokemonType.flying:
         return Colors.lightBlue;
+      case PokemonType.grass:
+        return Colors.green;
+      case PokemonType.electric:
+        return Colors.amber;
+      case PokemonType.psychic:
+        return Colors.pink;
+      case PokemonType.ice:
+        return Colors.cyan;
+      case PokemonType.rock:
+        return Colors.brown;
+      case PokemonType.ghost:
+        return Colors.deepPurple;
+      case PokemonType.dragon:
+        return Colors.indigo;
+      case PokemonType.dark:
+        return Colors.black87;
+      case PokemonType.steel:
+        return Colors.blueGrey;
+      case PokemonType.fairy:
+        return Colors.pinkAccent;
       default:
         return Colors.white;
     }
@@ -74,7 +95,7 @@ class _PokeDetailsViewState extends State<PokeDetailsView> {
                       spacing: 8,
                       children:
                           pokemon.types.map((type) {
-                            return Chip(label: Text(type));
+                            return Chip(label: Text(type.name));
                           }).toList(),
                     ),
                     const SizedBox(height: 16),

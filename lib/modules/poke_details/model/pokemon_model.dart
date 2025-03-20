@@ -1,10 +1,11 @@
 import 'package:equatable/equatable.dart';
+import 'package:pokedex/modules/poke_details/model/pokemon_type_enum.dart';
 
 class PokemonModel extends Equatable {
   final int id;
   final String name;
   final String imageUrl;
-  final List<String> types;
+  final List<PokemonType> types;
   final int height;
   final int weight;
 
@@ -22,13 +23,13 @@ class PokemonModel extends Equatable {
       id: json['id'],
       name: json['name'],
       imageUrl: json['sprites']['other']['official-artwork']['front_default'],
-      types: (json['types'] as List).map((e) => e['type']['name'].toString()).toList(),
+      types: (json['types'] as List).map((e) => PokemonType.fromString(e['type']['name'])).toList(),
       height: json['height'],
       weight: json['weight'],
     );
   }
 
-  PokemonModel copyWith({int? id, String? name, String? imageUrl, List<String>? types, int? height, int? weight}) {
+  PokemonModel copyWith({int? id, String? name, String? imageUrl, List<PokemonType>? types, int? height, int? weight}) {
     return PokemonModel(
       id: id ?? this.id,
       name: name ?? this.name,
